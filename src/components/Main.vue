@@ -106,22 +106,19 @@ onMounted(async () => {
 
 <template>
   <main class="flex-1 py-10 px-5 sm:px-10">
+    <h1 class="text-3xl text-white text-center font-bold mb-16">Categories</h1>
     <div class="wrapper flex justify-center w-full flex-wrap gap-5">
-      <div
-        class="categories-1"
-        v-for="(item, index) in categories.value"
-        @click="getCategoriesClick(index)"
-      >
-        <a
-          href="#"
-          class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+      <div class="categories-1" v-for="(item, index) in categories.value">
+        <router-link
+          to="/start-quiz"
+          class="block max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
         >
-          <h5
-            class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+          <p
+            class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white"
           >
             {{ index }}
-          </h5>
-        </a>
+          </p>
+        </router-link>
       </div>
     </div>
   </main>
