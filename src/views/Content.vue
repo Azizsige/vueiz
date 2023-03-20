@@ -15,6 +15,6 @@
 </template>
 <script setup>
 import LeftBar from "../components/LeftBar.vue";
-import Main from "../components/Main.vue";
+import Main from "../components/MainContent.vue";
 </script>
 <style></style>

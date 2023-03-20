@@ -1,10 +1,10 @@
 <script setup>
-import Home from "./views/Home.vue";
-import Quiz from "./views/Quiz.vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
 </script>
 
 <template>
-  <router-view></router-view>
+  <router-view :key="$route.fullPath"></router-view>
 </template>
 
 <style scoped></style>
