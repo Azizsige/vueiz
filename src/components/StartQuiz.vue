@@ -3,22 +3,29 @@ import { useStore } from "../stores/store";
 import { storeToRefs } from "pinia";
 import { onMounted, reactive, ref } from "vue";
 import axios from "axios";
-
 const store = useStore();
 const { name, getQuiz, getCategoryName } = storeToRefs(store);
+
 const dataQuizs = reactive({
   value: [],
 });
 const no = ref(dataQuizs.value.length);
 const length = ref(0);
-
 const answers = reactive({
   value: [],
 });
-
 const correctAnswer = ref("");
+const noQuiz = ref(0);
+
+const getChoose = (event) => {
+  // let tag = event.target;
+  console.log(event.target.dataset.answer);
+  console.log(event.target);
+};
 
 const getAnswer = (answer) => {
+  // let text = e.target.tagName;
+  // console.log(event.target.tagName);
   if (answer == correctAnswer.value) {
     alert("correct");
   } else {
@@ -35,11 +42,11 @@ const getQuizs = async () => {
       }&limit=5&difficulty=${store.difficultyStore.toLowerCase()}`
     )
     .then((results) => {
-      dataQuizs.value = results.data[0];
+      dataQuizs.value = results.data[noQuiz.value];
       length.value = results.data.length;
-      answers.value = results.data[0].incorrectAnswers;
-      answers.value.push(results.data[0].correctAnswer);
-      correctAnswer.value = results.data[0].correctAnswer;
+      answers.value = results.data[noQuiz.value].incorrectAnswers;
+      answers.value.push(results.data[noQuiz.value].correctAnswer);
+      correctAnswer.value = results.data[noQuiz.value].correctAnswer;
       // console.log(dataQuizs.value.length);
       console.log(dataQuizs.value);
       console.log(answers.value);
@@ -51,6 +58,16 @@ const getQuizs = async () => {
 
 const randomSortAnswer = () => {
   answers.value.sort(() => Math.random() - 0.5);
+};
+
+const nextAnswer = async () => {
+  noQuiz.value++;
+  console.log(noQuiz.value);
+  if (noQuiz.value <= 4) {
+    await getQuizs();
+  } else {
+    alert("udahhh");
+  }
 };
 
 onMounted(async () => {
@@ -110,8 +127,9 @@ onMounted(async () => {
 
     <section class="quiz">
       <div class="quiz-info">
-        <span class="question font-bold">{{ dataQuizs.value.question }}</span>
-        <span class="score font-bold">Score 0 / {{ length }}</span>
+        <span class="question font-bold"
+          >{{ noQuiz + 1 }}. {{ dataQuizs.value.question }}</span
+        >
       </div>
 
       <div
@@ -119,14 +137,20 @@ onMounted(async () => {
         v-for="(answer, index) in answers.value"
         :key="answer.id"
       >
-        <label class="option" @click.prevent="getAnswer(answer)">
+        <label
+          class="option"
+          :id="index"
+          :data-answer="answer"
+          @click.prevent="getAnswer(answer)"
+          @click="getChoose"
+        >
           <input type="radio" />
           <span class="text-white">{{ answer }}</span>
         </label>
       </div>
 
       <div class="button flex w-full justify-end">
-        <button class="">Next</button>
+        <button class="" @click="nextAnswer">Next</button>
       </div>
     </section>
   </main>
